@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Cloud, Umbrella, Thermometer, Coffee, Tv, MapPin, Search, Music } from 'lucide-react';
-import AnimatedWeatherIcon from "react-animated-weather";   // ⭐ ADDED (animated icons)
+import AnimatedWeatherIcon from "react-animated-weather";
 import ThemeSelector from './components/ThemeSelector';
 
 // --- API UTILITIES ---
 
-// Open-Meteo doesn't require an API key! Great for portfolio projects.
 const getWeather = async (city) => {
   try {
-    // 1. Geocoding: Get Lat/Lon from City Name
     const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1&language=en&format=json`);
     const geoData = await geoRes.json();
 
@@ -18,7 +16,6 @@ const getWeather = async (city) => {
 
     const { latitude, longitude, name, country } = geoData.results[0];
 
-    // 2. Weather: Get current weather using Lat/Lon
     const weatherRes = await fetch(
       `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto`
     );
@@ -79,69 +76,69 @@ const getAdvice = (temp, code, wind) => {
     ]
   };
 
-const outfits = {
-  cold: [
-    "Insulated coat and scarf",
-    "Thermal layers with a heavy jacket",
-    "Wool gloves, hat, and thick boots",
-  ],
-  chilly: [
-    "Hoodie or light coat",
-    "Sweater with long pants",
-    "Layered shirt, hoodie, and jacket",
-  ],
-  mild: [
-    "Light jacket or cardigan",
-    "Long-sleeve shirt with jeans",
-    "Denim jacket with a simple tee",
-  ],
-  hot: [
-    "Shorts and a loose shirt",
-    "Tank top with breathable fabrics",
-    "Light cotton or linen outfit",
-  ],
-  rain: [
-    "Raincoat with umbrella",
-    "Waterproof jacket and boots",
-    "Hooded coat with quick-dry clothing",
-  ]
-};
+  const outfits = {
+    cold: [
+      "Insulated coat and scarf",
+      "Thermal layers with a heavy jacket",
+      "Wool gloves, hat, and thick boots",
+    ],
+    chilly: [
+      "Hoodie or light coat",
+      "Sweater with long pants",
+      "Layered shirt, hoodie, and jacket",
+    ],
+    mild: [
+      "Light jacket or cardigan",
+      "Long-sleeve shirt with jeans",
+      "Denim jacket with a simple tee",
+    ],
+    hot: [
+      "Shorts and a loose shirt",
+      "Tank top with breathable fabrics",
+      "Light cotton or linen outfit",
+    ],
+    rain: [
+      "Raincoat with umbrella",
+      "Waterproof jacket and boots",
+      "Hooded coat with quick-dry clothing",
+    ]
+  };
 
-const foods = {
-  cold: [
-    "Hot chocolate that warms you up like a gentle hug and gives you quick cozy energy.",
-    "A hearty stew that keeps your tummy full and happy when the air feels extra cold.",
-    "Curry with warm little spices that help your body feel toasty from the inside.",
-    "Roast dishes that give steady comfort and help you stay warm longer.",
-    "Soft, buttery pastries that feel like a tiny warm treat on a chilly day."
-  ],
-  chilly: [
-    "Tomato soup that gently warms you and feels comforting in the cool air.",
-    "A simple rice bowl that gives calm, steady energy without feeling heavy.",
-    "Warm tea with bread that feels like a soft little comfort snack.",
-    "Pasta that gives easy warmth and keeps you feeling balanced."
-  ],
-  mild: [
-    "A cozy sandwich with a nice balance of flavors that fits the gentle weather.",
-    "Light pasta that feels just right for mild days, not too warm and not too heavy.",
-    "Warm-but-light noodle dishes that are friendly on your stomach.",
-    "A tidy little lunch bowl with grains and greens that matches the calm weather.",
-    "A smoothie that’s refreshing in a soft, pleasant way."
-  ],
-  hot: [
-    "Fresh salads that cool you down and keep you hydrated when it’s toasty outside.",
-    "Cold noodles that feel refreshing and help your body stay comfy in the heat.",
-    "A sweet fruit bowl that gives hydrating, sunny energy.",
-    "Iced drinks that cool you off and help you relax in hot weather.",
-    "Light seafood dishes that are easy to eat and won’t make you feel overheated."
-  ],
-  rain: [
-    "Warm noodle soup that feels cozy and soothing on drizzly days.",
-    "Soft bread that’s gentle and comforting when the weather feels gloomy.",
-    "A cup of tea that brings warm, calm feelings during rainy moments.",
-    "A simple broth that warms you without feeling too heavy."
-  ]
-};
+  const foods = {
+    cold: [
+      "Hot chocolate that warms you up like a gentle hug and gives you quick cozy energy.",
+      "A hearty stew that keeps your tummy full and happy when the air feels extra cold.",
+      "Curry with warm little spices that help your body feel toasty from the inside.",
+      "Roast dishes that give steady comfort and help you stay warm longer.",
+      "Soft, buttery pastries that feel like a tiny warm treat on a chilly day."
+    ],
+    chilly: [
+      "Tomato soup that gently warms you and feels comforting in the cool air.",
+      "A simple rice bowl that gives calm, steady energy without feeling heavy.",
+      "Warm tea with bread that feels like a soft little comfort snack.",
+      "Pasta that gives easy warmth and keeps you feeling balanced."
+    ],
+    mild: [
+      "A cozy sandwich with a nice balance of flavors that fits the gentle weather.",
+      "Light pasta that feels just right for mild days, not too warm and not too heavy.",
+      "Warm-but-light noodle dishes that are friendly on your stomach.",
+      "A tidy little lunch bowl with grains and greens that matches the calm weather.",
+      "A smoothie that’s refreshing in a soft, pleasant way."
+    ],
+    hot: [
+      "Fresh salads that cool you down and keep you hydrated when it’s toasty outside.",
+      "Cold noodles that feel refreshing and help your body stay comfy in the heat.",
+      "A sweet fruit bowl that gives hydrating, sunny energy.",
+      "Iced drinks that cool you off and help you relax in hot weather.",
+      "Light seafood dishes that are easy to eat and won’t make you feel overheated."
+    ],
+    rain: [
+      "Warm noodle soup that feels cozy and soothing on drizzly days.",
+      "Soft bread that’s gentle and comforting when the weather feels gloomy.",
+      "A cup of tea that brings warm, calm feelings during rainy moments.",
+      "A simple broth that warms you without feeling too heavy."
+    ]
+  };
 
   const warnings = {
     cold: ["Watch out for ice!", "Stay warm and don’t overdo outdoor time."],
@@ -175,8 +172,7 @@ const foods = {
   return { outfit, vibe, food, warning };
 };
 
-
-// --- WEATHER-AWARE NEWS BANK — replaces chaotic Gen-Z set ---
+// --- WEATHER-AWARE NEWS BANK ---
 
 const NEWS_BANK = {
   clear: [
@@ -206,9 +202,6 @@ const NEWS_BANK = {
   ]
 };
 
-
-// --- getNews FIXED (weather-aware) ---
-
 const getNews = (city, temp, code, wind) => {
   let type = "clear";
 
@@ -222,7 +215,6 @@ const getNews = (city, temp, code, wind) => {
 
   return raw.replace("{city}", city).replace("{temp}", String(temp));
 };
-
 
 // --- UI COMPONENTS ---
 
@@ -246,9 +238,6 @@ export default function App() {
   const [advice, setAdvice] = useState({});
   const [headline, setHeadline] = useState("");
 
-  // headline index removed — we update the headline string only
-
-  // ⭐ ADDED: theme presets and persistence (default = Sakura as requested)
   const themes = {
     sakura: {
       wrapperBg: "bg-[#FFF5F5]",
@@ -287,18 +276,12 @@ export default function App() {
       mascotGlow: "shadow-blue-200/30"
     }
   };
-  const [theme, setTheme] = useState(() => {
-    // Start with Sakura unless user has saved preference
-    return localStorage.getItem("kawaii_theme") || "sakura";
-  });
+  const [theme, setTheme] = useState(() => localStorage.getItem("kawaii_theme") || "sakura");
 
   useEffect(() => {
     localStorage.setItem("kawaii_theme", theme);
   }, [theme]);
 
-  // Stable fetch function that accepts an explicit city argument.
-  // This prevents the function reference from changing on every `city` update
-  // (typing in the input) which would otherwise retrigger effects.
   const fetchWeather = useCallback(async (queryCity) => {
     setLoading(true);
     setError(false);
@@ -311,10 +294,10 @@ export default function App() {
     setLoading(false);
   }, []);
 
-  // Run once on mount using the initial `city` value.
+  // ✅ Run once on mount, NOT on every keystroke
   useEffect(() => {
     fetchWeather(city);
-  }, [fetchWeather, city]);
+  }, [fetchWeather]);
 
   useEffect(() => {
     if (weather) {
@@ -323,17 +306,15 @@ export default function App() {
     }
   }, [weather]);
 
-  // ⭐ NEW — TV Ticker Logic (one headline ➜ scroll ➜ next)
   useEffect(() => {
     if (!weather) return;
     const interval = setInterval(() => {
       setHeadline(getNews(weather.city, weather.temp, weather.code, weather.wind));
-    }, 12000); // duration = CSS animation
+    }, 12000);
 
     return () => clearInterval(interval);
   }, [weather]);
 
-  // ⭐ Weather code → Animated icon mapping
   const mapIcon = (code) => {
     if (code === 0) return "CLEAR_DAY";
     if (code >= 1 && code <= 3) return "PARTLY_CLOUDY_DAY";
@@ -343,23 +324,15 @@ export default function App() {
     return "CLOUDY";
   };
 
-  // ⭐ Icon color influenced by theme (you asked icons change with theme)
   const iconColorForTheme = themes[theme] ? themes[theme].iconAccent : "#00AEEF";
 
   return (
-    // wrapper background is controlled by theme; original classes preserved
     <div className={`${themes[theme].wrapperBg} min-h-screen font-sans p-4 md:p-8 flex items-center justify-center transition-colors`}>
-
-      {/* ⭐ THEME SELECTOR */}
       <div className="fixed top-4 left-4 z-50">
         <ThemeSelector theme={theme} setTheme={setTheme} />
       </div>
 
-      {/* Mascot removed */}
-
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6">
-
-        {/* --- HEADER SECTION (Search) --- */}
         <div className={`${themes[theme].headerBg} md:col-span-12 p-6 rounded-3xl border-4 border-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-4`}>
           <div className="flex items-center gap-3">
              <div className="bg-white p-3 rounded-full border-2 border-pink-300 dark:border-pink-500">
@@ -389,30 +362,25 @@ export default function App() {
           </div>
         </div>
 
-        {/* --- ERROR STATE --- */}
         {error && (
           <div className="md:col-span-12 bg-red-100 text-red-500 p-4 rounded-2xl text-center font-bold border-2 border-red-200 dark:bg-red-800 dark:text-red-200">
             Oops! Couldn't find that city. Try "London" or "Tokyo"!
           </div>
         )}
 
-        {/* --- LOADING STATE --- */}
         {loading && !error && (
            <div className="md:col-span-12 py-20 text-center text-pink-400 font-bold text-xl animate-pulse">
              Fetching cute clouds... ☁️
            </div>
         )}
 
-        {/* --- MAIN CONTENT --- */}
         {!loading && weather && (
           <>
-            {/* 1. MAIN WEATHER CARD */}
             <div className={`${themes[theme].mainCardBg} md:col-span-5 rounded-3xl p-8 border-4 border-white shadow-xl flex flex-col items-center justify-center text-center relative overflow-hidden`}>
                <div className="absolute top-4 right-4 bg-white/50 px-3 py-1 rounded-full text-xs font-bold text-cyan-700">
                   LIVE
                </div>
 
-               {/* ⭐ Animated Icon */}
                <AnimatedWeatherIcon
                  icon={mapIcon(weather.code)}
                  color={iconColorForTheme}
@@ -434,27 +402,20 @@ export default function App() {
                </div>
             </div>
 
-            {/* 2. THE ADVISOR GRID */}
             <div className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-              {/* Vibe Check (Sarcasm) */}
               <Card title="Vibe Check" icon={Music} color={`${"bg-[#FFF4C3]"} ${themes[theme].mainCardBg}`}>
                 {advice.vibe}
               </Card>
 
-
-              {/* OOTD (Clothing) */}
               <Card title="Fit Check" icon={Umbrella} color={`${"bg-[#E2F0CB]"} ${themes[theme].mainCardBg}`}>
                 {advice.outfit}
               </Card>
 
-              {/* Menu (Food) */}
               <Card title="Menu Rec" icon={Coffee} color={`${"bg-[#FFE2E2]"} ${themes[theme].mainCardBg}`}>
                 Recommended nutrient intake: <br/>
                 <span className="text-lg text-pink-600">{advice.food}</span>
               </Card>
 
-              {/* Warnings / Stats */}
               <Card title="Alerts" icon={Thermometer} color={`${"bg-[#E0E7FF]"} ${themes[theme].mainCardBg}`}>
                 {advice.warning ? (
                   <span className="text-red-500 font-bold animate-pulse">⚠️ {advice.warning}</span>
@@ -465,11 +426,8 @@ export default function App() {
               </Card>
             </div>
 
-            {/* 3. NEWS TICKER */}
             <div className={`${themes[theme].tickerBg} md:col-span-12 rounded-2xl p-4 border-4 border-gray-600 shadow-xl text-green-400 font-mono overflow-hidden flex items-center gap-4`}>
                <Tv size={20} className="shrink-0" />
-
-               {/* ⭐ New TV-style ticker */}
                <div className="headline-item whitespace-nowrap">
                  <span className="font-bold mr-4">BREAKING NEWS:</span> 
                  <span className="tracking-wide fade-in">{headline}</span>
@@ -477,7 +435,6 @@ export default function App() {
             </div>
           </>
         )}
-
       </div>
     </div>
   );
