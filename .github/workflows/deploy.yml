@@ -19,7 +19,11 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm ci
+        # Use npm install in CI to avoid strict lockfile mismatch issues.
+        # `npm ci` is ideal but can fail if package-lock.json differs from package.json
+        # (different npm versions or transient dependency versions). `npm install` is
+        # more forgiving and suitable for single-branch deploy workflows.
+        run: npm install --no-audit --no-fund
 
       - name: Build
         run: npm run build
