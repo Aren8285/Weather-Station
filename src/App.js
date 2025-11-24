@@ -296,21 +296,25 @@ export default function App() {
     localStorage.setItem("kawaii_theme", theme);
   }, [theme]);
 
-  const fetchWeather = useCallback(async () => {
+  // Stable fetch function that accepts an explicit city argument.
+  // This prevents the function reference from changing on every `city` update
+  // (typing in the input) which would otherwise retrigger effects.
+  const fetchWeather = useCallback(async (queryCity) => {
     setLoading(true);
     setError(false);
-    const data = await getWeather(city);
+    const data = await getWeather(queryCity);
     if (data) {
       setWeather(data);
     } else {
       setError(true);
     }
     setLoading(false);
-  }, [city]);
+  }, []);
 
+  // Run once on mount using the initial `city` value.
   useEffect(() => {
-    fetchWeather();
-  }, [fetchWeather]);
+    fetchWeather(city);
+  }, [fetchWeather, city]);
 
   useEffect(() => {
     if (weather) {
@@ -372,12 +376,12 @@ export default function App() {
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && fetchWeather()}
+              onKeyDown={(e) => e.key === 'Enter' && fetchWeather(city)}
               placeholder="Enter city..."
               className="w-full md:w-64 px-6 py-3 rounded-full border-2 border-pink-300 dark:bg-gray-800 dark:text-white focus:outline-none focus:border-pink-500 font-bold text-gray-600 placeholder-pink-300"
             />
             <button 
-              onClick={fetchWeather}
+              onClick={() => fetchWeather(city)}
               className="bg-pink-500 text-white p-3 rounded-full hover:bg-pink-600 transition-colors shadow-md active:translate-y-1"
             >
               <Search size={24} />
