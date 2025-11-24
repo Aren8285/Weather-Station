@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Cloud, Umbrella, Thermometer, Coffee, Tv, MapPin, Search, Music } from 'lucide-react';
 import AnimatedWeatherIcon from "react-animated-weather";   // ⭐ ADDED (animated icons)
-import Header from './components/Header';
 import ThemeSelector from './components/ThemeSelector';
 import Mascot from './components/Mascot';
 
@@ -182,27 +181,27 @@ const foods = {
 
 const NEWS_BANK = {
   clear: [
-    "Sunshine levels in ${city} officially classified as immaculate.",
-    "Experts report: blue skies causing unexpected happiness in ${city}.",
-    "Local flowers in ${city} are thriving and asking for compliments."
+    "Sunshine levels in {city} officially classified as immaculate.",
+    "Experts report: blue skies causing unexpected happiness in {city}.",
+    "Local flowers in {city} are thriving and asking for compliments."
   ],
   rain: [
-    "Rainfall in ${city} reaches 'dramatic anime scene' levels.",
-    "Umbrellas in ${city} have achieved maximum emotional damage resistance.",
-    "Puddles in ${city} now legally qualify as micro-lakes."
+    "Rainfall in {city} reaches 'dramatic anime scene' levels.",
+    "Umbrellas in {city} have achieved maximum emotional damage resistance.",
+    "Puddles in {city} now legally qualify as micro-lakes."
   ],
   cold: [
-    "Temperature in ${city} has entered 'please stay inside' territory.",
-    "Residents seen waddling like penguins across ${city}.",
+    "Temperature in {city} has entered 'please stay inside' territory.",
+    "Residents seen waddling like penguins across {city}.",
     "City declares emergency sweater weather supremacy."
   ],
   hot: [
-    "Heatwave in ${city} has personally offended several citizens.",
+    "Heatwave in {city} has personally offended several citizens.",
     "Locals report spontaneous sweating and mild regret.",
     "Officials warn: asphalt may now be a lava-type Pokémon."
   ],
   wind: [
-    "Wind speeds in ${city} approaching anime cape-flutter levels.",
+    "Wind speeds in {city} approaching anime cape-flutter levels.",
     "Local hats missing; wind is the primary suspect.",
     "City residents struggle to look cool while being blown sideways."
   ]
@@ -222,7 +221,7 @@ const getNews = (city, temp, code, wind) => {
   const bank = NEWS_BANK[type];
   const raw = bank[Math.floor(Math.random() * bank.length)];
 
-  return raw.replace("${city}", city).replace("${temp}", temp);
+  return raw.replace("{city}", city).replace("{temp}", String(temp));
 };
 
 
@@ -248,7 +247,7 @@ export default function App() {
   const [advice, setAdvice] = useState({});
   const [headline, setHeadline] = useState("");
 
-  const [headlineIndex, setHeadlineIndex] = useState(0); // ⭐ ADDED (TV ticker)
+  // headline index removed — we update the headline string only
 
   // ⭐ ADDED: theme presets and persistence (default = Sakura as requested)
   const themes = {
@@ -298,7 +297,7 @@ export default function App() {
     localStorage.setItem("kawaii_theme", theme);
   }, [theme]);
 
-  const fetchWeather = async () => {
+  const fetchWeather = useCallback(async () => {
     setLoading(true);
     setError(false);
     const data = await getWeather(city);
@@ -308,11 +307,11 @@ export default function App() {
       setError(true);
     }
     setLoading(false);
-  };
+  }, [city]);
 
   useEffect(() => {
     fetchWeather();
-  }, []);
+  }, [fetchWeather]);
 
   useEffect(() => {
     if (weather) {
@@ -326,7 +325,6 @@ export default function App() {
     if (!weather) return;
     const interval = setInterval(() => {
       setHeadline(getNews(weather.city, weather.temp, weather.code, weather.wind));
-      setHeadlineIndex(prev => prev + 1);
     }, 12000); // duration = CSS animation
 
     return () => clearInterval(interval);
