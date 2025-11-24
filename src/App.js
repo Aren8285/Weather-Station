@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Cloud, Umbrella, Thermometer, Coffee, Tv, MapPin, Search, Music } from 'lucide-react';
 import AnimatedWeatherIcon from "react-animated-weather";   // ⭐ ADDED (animated icons)
 import ThemeSelector from './components/ThemeSelector';
-import Mascot from './components/Mascot';
 
 // --- API UTILITIES ---
 
@@ -352,8 +351,7 @@ export default function App() {
         <ThemeSelector theme={theme} setTheme={setTheme} />
       </div>
 
-      {/* ⭐ KAWAII FLOATING MASCOT — use uploaded file path (will be transformed to URL by environment) */}
-      <Mascot src={"/mascot.png"} alt="Kawaii Mascot" glowClass={themes[theme].mascotGlow} />
+      {/* Mascot removed */}
 
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6">
 
