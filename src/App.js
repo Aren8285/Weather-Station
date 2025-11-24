@@ -294,10 +294,14 @@ export default function App() {
     setLoading(false);
   }, []);
 
-  // ✅ Run once on mount, NOT on every keystroke
   useEffect(() => {
-    fetchWeather(city);
-  }, [fetchWeather]);
+  const load = async () => {
+    await fetchWeather(city);
+  };
+  load();
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
+
 
   useEffect(() => {
     if (weather) {
