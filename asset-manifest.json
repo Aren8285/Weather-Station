@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Weather-Station/static/css/main.2f7b657c.css",
-    "main.js": "/Weather-Station/static/js/main.76f0bf29.js",
+    "main.js": "/Weather-Station/static/js/main.21d1f5d6.js",
     "static/js/453.96557154.chunk.js": "/Weather-Station/static/js/453.96557154.chunk.js",
     "index.html": "/Weather-Station/index.html",
     "main.2f7b657c.css.map": "/Weather-Station/static/css/main.2f7b657c.css.map",
-    "main.76f0bf29.js.map": "/Weather-Station/static/js/main.76f0bf29.js.map",
+    "main.21d1f5d6.js.map": "/Weather-Station/static/js/main.21d1f5d6.js.map",
     "453.96557154.chunk.js.map": "/Weather-Station/static/js/453.96557154.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.2f7b657c.css",
-    "static/js/main.76f0bf29.js"
+    "static/js/main.21d1f5d6.js"
   ]
 }
