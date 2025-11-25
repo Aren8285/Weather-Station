@@ -30,6 +30,8 @@ const getWeather = async (city) => {
       isDay: weatherData.current_weather.is_day,
       max: weatherData.daily.temperature_2m_max[0],
       min: weatherData.daily.temperature_2m_min[0],
+      timezone: weatherData.timezone,
+
     };
   } catch (error) {
     console.error(error);
@@ -234,6 +236,7 @@ export default function App() {
   const [city, setCity] = useState("Tokyo");
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [localTime, setLocalTime] = useState("");
   const [error, setError] = useState(false);
   const [advice, setAdvice] = useState({});
   const [headline, setHeadline] = useState("");
@@ -307,6 +310,14 @@ export default function App() {
     if (weather) {
       setAdvice(getAdvice(weather.temp, weather.code, weather.wind));
       setHeadline(getNews(weather.city, weather.temp, weather.code, weather.wind));
+      const date = new Date().toLocaleTimeString("en-US", {
+  hour: "2-digit",
+  minute: "2-digit",
+  hour12: true,
+  timeZone: weather.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone
+});
+setLocalTime(date);
+
     }
   }, [weather]);
 
@@ -319,14 +330,38 @@ export default function App() {
     return () => clearInterval(interval);
   }, [weather]);
 
-  const mapIcon = (code) => {
-    if (code === 0) return "CLEAR_DAY";
-    if (code >= 1 && code <= 3) return "PARTLY_CLOUDY_DAY";
-    if (code >= 51 && code <= 67) return "RAIN";
-    if (code >= 71 && code <= 77) return "SNOW";
-    if (code >= 95) return "THUNDERSTORM";
-    return "CLOUDY";
-  };
+const mapIcon = (code) => {
+  // Clear Sky
+  if (code === 0) return "CLEAR_DAY";
+
+  // Partly Cloudy
+  if (code === 1) return "PARTLY_CLOUDY_DAY";
+  if (code === 2) return "PARTLY_CLOUDY_DAY";
+
+  // Cloudy / Overcast
+  if (code === 3) return "CLOUDY";
+
+  // Fog
+  if (code >= 45 && code <= 48) return "FOG";
+
+  // Drizzle
+  if (code >= 51 && code <= 57) return "RAIN";
+
+  // Rain
+  if (code >= 61 && code <= 67) return "RAIN";
+  if (code >= 80 && code <= 82) return "RAIN"; // rain showers
+
+  // Snow
+  if (code >= 71 && code <= 77) return "SNOW"; // falling snow
+  if (code === 85 || code === 86) return "SNOW"; // snow showers
+
+  // Thunderstorm
+  if (code >= 95 && code <= 99) return "THUNDERSTORM";
+
+  // Default
+  return "CLOUDY";
+};
+
 
   const iconColorForTheme = themes[theme] ? themes[theme].iconAccent : "#00AEEF";
 
@@ -399,6 +434,10 @@ export default function App() {
                <div className={`text-8xl font-black mb-2 tracking-tighter ${themes[theme].cardAccent}`}>
                  {Math.round(weather.temp)}°
                </div>
+               <div className="text-lg font-bold opacity-70 mt-2">
+  {localTime}
+</div>
+
 
                <div className={`flex gap-4 font-bold px-6 py-2 rounded-xl ${themes[theme].cardAccent}`} >
                   <span className="bg-white/40 px-3 py-1 rounded-xl">H: {Math.round(weather.max)}°</span>
